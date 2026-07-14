@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ material.name }} - تفاصيل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #00105e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .detail-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .detail-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .detail-header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .detail-header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            display: inline-block;
+        }
+        
+        .detail-content {
+            padding: 30px;
+        }
+        
+        .detail-image {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .detail-image img {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .info-table tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-table td {
+            padding: 12px;
+        }
+        
+        .info-table td:first-child {
+            font-weight: bold;
+            width: 35%;
+            color: #1e3c72;
+        }
+        
+        .info-table td:last-child {
+            color: #666;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+        
+        .btn-edit-date {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-edit-date:hover {
+            background: #e68900;
+        }
+        
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* تنسيق التاريخ الحالي */
+        .session-date {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .session-upcoming {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .session-passed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media (max-width: 768px) {
+            .detail-content {
+                padding: 20px;
+            }
+            
+            .info-table td {
+                padding: 8px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="detail-card">
+            <div class="detail-header">
+                <h1>{{ material.name }}</h1>
+                <div class="badge">
+                    {% if material.department == 'section1' %}
+                        🔒 محجوزين
+                    {% elif material.department == 'section2' %}
+                        ⛓️ محبوسين
+                    {% elif material.department == 'section3' %}
+                        ⚖️ محكوم عليهم
+                    {% else %}
+                        📋 بدون قسم
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="detail-content">
+                {% if material.picture %}
+                <div class="detail-image">
+                    <img src="{{ material.picture.url }}" alt="{{ material.name }}">
+                </div>
+                {% endif %}
+                
+                <table class="info-table">
+                    <tr>
+                        <td>🔹 الاسم الكامل:</td>
+                        <td>{{ material.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>🔹 العمر:</td>
+                        <td>{{ material.age }} سنة</td>
+                    </tr>
+                    <tr>
+                        <td>🔹 العنوان:</td>
+                        <td>{{ material.address|default:"غير محدد" }}</td>
+                    </tr>
+                    <tr>
+                        <td>🔹 رقم القضية:</td>
+                        <td>{{ material.case_number|default:"لا يوجد" }}</td>
+                    </tr>
+                    <tr>
+                        <td>🔹 نوع القضية:</td>
+                        <td>{{ material.case_type|default:"غير محدد" }}</td>
+                    </tr>
+                    <tr>
+                       <tr>
+    <td>📅 تاريخ الجلسة:</td>
+    <td>
+        {% if material.date_sessions %}
+            {{ material.date_sessions|date:"Y-m-d" }}
+        {% else %}
+            غير محدد
+        {% endif %}
+    </td>
+</tr>
+                    </tr>
+                    <tr>
+                        <td>📄 الأوراق الخاصة:</td>
+                        <td>
+                            {% if material.paper %}
+                                <a href="{{ material.paper.url }}" target="_blank" style="color: #1e3c72;">📥 تحميل الملف</a>
+                            {% else %}
+                                لا توجد أوراق
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>🔹 تاريخ الإضافة:</td>
+                        <td>{{ material.uploaded_at|date:"Y-m-d H:i" }}</td>
+                    </tr>
+                </table>
+                
+                <div class="nav-buttons">
+                    <!-- زر تعديل التاريخ فقط -->
+                    <a href="{% url 'edit_session' material.id %}" class="btn btn-edit-date">📅 تعديل تاريخ الجلسة</a>
+                
+                    
+                    <!-- زر الحذف -->
+                    <a href="{% url 'delete_material' material.id %}" class="btn btn-danger" 
+                       onclick="return confirm('هل أنت متأكد من حذف {{ material.name }}؟')">🗑️ حذف</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="back-button">
+            {% if material.department == 'section1' %}
+                <a href="{% url 'section1_page' %}" class="back-btn">← العودة للقسم</a>
+            {% elif material.department == 'section2' %}
+                <a href="{% url 'section2_page' %}" class="back-btn">← العودة للقسم</a>
+            {% elif material.department == 'section3' %}
+                <a href="{% url 'section3_page' %}" class="back-btn">← العودة للقسم</a>
+            {% else %}
+                <a href="{% url 'home' %}" class="back-btn">← العودة</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

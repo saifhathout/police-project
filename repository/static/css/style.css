@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fb;
+    padding: 40px;
+    color: #333;
+}
+
+/* Navbar */
+
+nav {
+    background-color: #ffffff;
+    padding: 18px 25px;
+    border-radius: 12px;
+    margin-bottom: 35px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+nav a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+    margin-right: 20px;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #1e40af;
+}
+
+/* Titles */
+
+h1,
+h2,
+h3 {
+    color: #1f2937;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h3 a {
+    color: #2563eb;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+h3 a:hover {
+    color: #1e40af;
+}
+
+/* Form */
+
+form {
+    margin-bottom: 35px;
+}
+
+input {
+    padding: 12px;
+    width: 320px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    background-color: white;
+}
+
+input:focus {
+    border-color: #2563eb;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #1e40af;
+}
+
+/* Paragraphs */
+
+p {
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: #4b5563;
+}
+
+/* Material Cards */
+
+.material-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+}
+
+.material-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Detail Card */
+
+.detail-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Links */
+
+a {
+    cursor: pointer;
+}
+
+/* Download Button */
+
+.detail-card a,
+.material-card a {
+    color: #2563eb;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.detail-card a:hover,
+.material-card a:hover {
+    color: #1e40af;
+}
+
+/* Horizontal Line */
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 20px;
+}

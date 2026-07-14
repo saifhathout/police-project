@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الحذف</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #00105e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .warning-box {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .warning-box h2 {
+            color: #dc3545;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .material-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: right;
+        }
+        
+        .material-info strong {
+            color: #1e3c72;
+        }
+        
+        .material-info img {
+            margin-top: 10px;
+            border-radius: 10px;
+            max-width: 100px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+        
+        @media (max-width: 768px) {
+            .warning-box {
+                padding: 20px;
+                margin: 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-box">
+        <h2>⚠️ تأكيد الحذف</h2>
+        <p>هل أنت متأكد من حذف هذا المتهم؟</p>
+        
+        <div class="material-info">
+            <strong>👤 الاسم:</strong> {{ material.name }}<br>
+            <strong>📅 العمر:</strong> {{ material.age }} سنة<br>
+            <strong>📍 العنوان:</strong> {{ material.address|default:"غير محدد" }}<br>
+            <strong>📋 رقم القضية:</strong> {{ material.case_number|default:"لا يوجد" }}<br>
+            <strong>⚖️ نوع القضية:</strong> {{ material.case_type|default:"غير محدد" }}<br>
+            {% if material.picture %}
+                <strong>🖼️ الصورة:</strong><br>
+                <img src="{{ material.picture.url }}" alt="{{ material.name }}">
+            {% endif %}
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="buttons">
+                <button type="submit" class="btn-delete">🗑️ نعم، احذف</button>
+                {% if material.department == 'section1' %}
+                    <a href="{% url 'section1_page' %}" class="btn-cancel">❌ إلغاء</a>
+                {% elif material.department == 'section2' %}
+                    <a href="{% url 'section2_page' %}" class="btn-cancel">❌ إلغاء</a>
+                {% elif material.department == 'section3' %}
+                    <a href="{% url 'section3_page' %}" class="btn-cancel">❌ إلغاء</a>
+                {% else %}
+                    <a href="{% url 'second_page' %}" class="btn-cancel">❌ إلغاء</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</body>
+</html>

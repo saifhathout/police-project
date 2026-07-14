@@ -1,0 +1,279 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ section_name }} - إدارة البيانات</title>
+    <style>
+        /* للأقسام المختلفة */
+        .section-1 .section-title,
+        .section-1 .card-name,
+        .section-1 .search-btn,
+        .section-1 .btn-view,
+        .section-1 .count-badge {
+            color: #000000;
+        }
+        
+        .section-2 .section-title,
+        .section-2 .card-name,
+        .section-2 .search-btn,
+        .section-2 .btn-view,
+        .section-2 .count-badge {
+            color: #000000;
+            
+        }
+        
+        .section-3 .section-title,
+        .section-3 .card-name,
+        .section-3 .search-btn,
+        .section-3 .btn-view,
+        .section-3 .count-badge {
+            color: #000000;
+            
+        }
+        
+        /* الأنماط العامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #00105e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 45px;
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .section-icon {
+            font-size: 3em;
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1em;
+        }
+        
+        .search-btn {
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+        
+        
+        .upload-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .person-card {
+            height: 400px;
+            background: rgb(255, 255, 255);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .card-name {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .card-info {
+            margin: 10px 0;
+            color: #666;
+        }
+        
+        .card-info span {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .card-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-view {
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+        }
+        
+        .back-button {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .count-badge {
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        
+    </style>
+</head>
+<body class="section-{{ section_number }}">
+    <div class="container">
+        <div class="header-section">
+            <h1 class="section-title">{{ section_name }}</h1>
+            <div class="count-badge">عدد المتهمين: {{ materials|length }}</div>
+        </div>
+        
+        <div class="search-section">
+            <form method="GET" class="search-form">
+                <input type="text" name="q" class="search-input" 
+                       placeholder="بحث بالاسم ..." 
+                       value="{{ query }}">
+                <button type="submit" class="search-btn">بحث</button>
+                {% if section_number == 1 %}
+                    <a href="{% url 'upload_section1' %}" class="upload-btn">رفع بيانات جديدة</a>
+                {% elif section_number == 2 %}
+                    <a href="{% url 'upload_section2' %}" class="upload-btn">رفع بيانات جديدة</a>
+                {% elif section_number == 3 %}
+                    <a href="{% url 'upload_section3' %}" class="upload-btn">رفع بيانات جديدة</a>
+                {% endif %}
+            </form>
+        </div>
+        
+        <div class="cards-grid">
+            {% for material in materials %}
+            <div class="person-card">
+                {% if material.picture %}
+                    <img src="{{ material.picture.url }}" class="card-image" style="object-fit: cover;">
+                {% else %}
+                    <div class="card-image">👤</div>
+                {% endif %}
+                
+                <div class="card-content">
+                    <h2 class="card-name">{{ material.name }}</h2>
+                    <div class="card-info">
+    
+   
+    <span>رقم القضية:</span> {{ material.case_number|default:"لا يوجد" }}<br>
+ 
+   
+    
+</div>
+                    <div class="card-actions">
+                        <a href="{% url 'material_detail' material.id %}" class="btn-view">عرض</a>
+                        <a href="{% url 'delete_material' material.id %}" class="btn-delete" 
+                           onclick="return confirm('تأكيد الحذف؟')">حذف</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-results">
+                <h3>لا توجد بيانات</h3>
+                <p>لم يتم العثور على المتهمين في هذا القسم</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="back-button">
+            <a href="{% url 'second_page' %}" class="back-btn">العودة</a>
+        </div>
+    </div>
+</body>
+</html>

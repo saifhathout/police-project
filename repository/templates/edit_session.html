@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل تاريخ الجلسة - {{ material.name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #00105e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .header h1 {
+            color: {{ section_color }};
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+        }
+        
+        .info-box strong {
+            color: #1e3c72;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: {{ section_color }};
+        }
+        
+        .current-date {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-submit {
+            flex: 1;
+            background: {{ section_color }};
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            flex: 1;
+            background: #6c757d;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+        
+        .messages {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-card">
+            <div class="header">
+                <h1>📅 تعديل تاريخ الجلسة</h1>
+                <p>{{ material.name }}</p>
+            </div>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <!-- <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}"> -->
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="info-box">
+                <p><strong>👤 الاسم:</strong> {{ material.name }}</p>
+                <p><strong>⚖️ رقم القضية:</strong> {{ material.case_number|default:"لا يوجد" }}</p>
+                <p><strong>📋 نوع القضية:</strong> {{ material.case_type|default:"غير محدد" }}</p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="date_sessions">📅 تاريخ الجلسة</label>
+                    <input type="date" name="date_sessions" id="date_sessions" 
+                           value="{{ material.date_sessions|date:'Y-m-d' }}" required>
+                    <div class="current-date">
+                        {% if material.date_sessions %}
+                            التاريخ الحالي: {{ material.date_sessions|date:"Y-m-d" }}
+                        {% else %}
+                            لا يوجد تاريخ محدد حالياً
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button type="submit" class="btn-submit">💾 حفظ التاريخ</button>
+                    <a href="
+                        {% if material.department == 'section1' %}
+                            {% url 'section1_page' %}
+                        {% elif material.department == 'section2' %}
+                            {% url 'section2_page' %}
+                        {% elif material.department == 'section3' %}
+                            {% url 'section3_page' %}
+                        {% else %}
+                            {% url 'home' %}
+                        {% endif %}
+                    " class="btn-cancel">❌ إلغاء</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

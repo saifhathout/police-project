@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية - ثلاثة أقسام</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #00105e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            animation: fadeInUp 0.5s ease-out;
+            text-decoration: none;
+            display: block;
+            margin-top: 150px;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .btn-card {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+            border: none;
+            cursor: pointer;
+            background: #693136;
+        }
+        
+        .btn-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .card-1,
+        .card-2,
+        .card-3 {
+            border-top: 5px solid #5590ff;
+        }
+        
+        .back-button {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+     
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ اختار قسم من الأقسام</h1>
+        
+        <div class="cards-container">
+            <!-- القسم الأول - محجوزين -->
+            <a href="{% url 'section1_page' %}" class="card card-1">
+               
+                <h2>محجوزين</h2>
+                <div class="btn-card">الدخول ➡️</div>
+            </a>
+            
+            <!-- القسم الثاني - محبوسين -->
+            <a href="{% url 'section2_page' %}" class="card card-2">
+                
+                <h2>محبوسين</h2>
+                <div class="btn-card">الدخول ➡️</div>
+            </a>
+            
+            <!-- القسم الثالث - محكوم عليهم -->
+            <a href="{% url 'section3_page' %}" class="card card-3">
+            
+                <h2>محكوم عليهم</h2>
+                <div class="btn-card">الدخول ➡️</div>
+            </a>
+        </div>
+        
+        <div class="back-button">
+            <a href="{% url 'first_page' %}" class="back-btn">← العودة للصفحة السابقة</a>
+        </div>
+    </div>
+</body>
+</html>
