@@ -1,8 +1,9 @@
-Django
-whitenoise 
-cloudinary 
-django-cloudinary-storage 
-python-decouple 
-dj-database-url 
-psycopg2-binary 
-gunicorn 
+Django>=4.2
+whitenoise
+cloudinary
+django-cloudinary-storage
+python-decouple
+python-dotenv
+dj-database-url
+psycopg2-binary
+gunicorn

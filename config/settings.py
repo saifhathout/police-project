@@ -4,17 +4,16 @@ Django settings for config project.
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
+from decouple import config
 import dj_database_url
-
-load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-this')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+# ========== الأمان ==========
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-default-key-change-this')
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-# ========== أهم جزء: ALLOWED_HOSTS ==========
+# ========== ALLOWED_HOSTS ==========
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
@@ -27,7 +26,7 @@ vercel_url = os.environ.get('VERCEL_URL')
 if vercel_url:
     ALLOWED_HOSTS.append(vercel_url)
 
-# ========== باقي الإعدادات ==========
+# ========== التطبيقات ==========
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -90,13 +89,17 @@ else:
 
 # ========== Cloudinary ==========
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
-    'API_KEY': os.getenv('API_KEY'),
-    'API_SECRET': os.getenv('API_SECRET'),
+    'CLOUD_NAME': config('CLOUD_NAME', default=''),
+    'API_KEY': config('API_KEY', default=''),
+    'API_SECRET': config('API_SECRET', default=''),
 }
 
-if os.getenv('CLOUD_NAME'):
+if config('CLOUD_NAME', default=''):
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    # للتطوير المحلي
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ========== الملفات الثابتة ==========
 STATIC_URL = '/static/'
