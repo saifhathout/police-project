@@ -10,18 +10,12 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ========== الأمان ==========
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-default-key-change-this')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-default-key')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-# ========== ALLOWED_HOSTS ==========
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    '.vercel.app',
-    '.now.sh',
-]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh']
 
-# إضافة رابط Vercel الحالي تلقائياً
+# إضافة رابط Vercel الحالي
 vercel_url = os.environ.get('VERCEL_URL')
 if vercel_url:
     ALLOWED_HOSTS.append(vercel_url)
@@ -35,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
-    'cloudinary_storage',
+    'storages',  # للتخزين مع Supabase S3
+    'cloudinary_storage',  # لو هتستخدم Cloudinary
     'cloudinary',
     'repository',
 ]
@@ -70,7 +65,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# ========== قاعدة البيانات ==========
+# ========== قاعدة البيانات (Supabase PostgreSQL) ==========
 if os.getenv('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
@@ -87,15 +82,33 @@ else:
         }
     }
 
-# ========== Cloudinary ==========
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': config('CLOUD_NAME', default=''),
-    'API_KEY': config('API_KEY', default=''),
-    'API_SECRET': config('API_SECRET', default=''),
-}
+# ========== تخزين الملفات (Supabase Storage via S3) ==========
+# استخدام S3 من Supabase للتخزين
+AWS_ACCESS_KEY_ID = os.getenv('SUPABASE_ACCESS_KEY')
+AWS_SECRET_ACCESS_KEY = os.getenv('SUPABASE_SECRET_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('SUPABASE_BUCKET_NAME', 'media')
+AWS_S3_REGION_NAME = os.getenv('SUPABASE_REGION', 'us-east-1')
+AWS_S3_ENDPOINT_URL = os.getenv('SUPABASE_S3_URL')
+AWS_QUERYSTRING_AUTH = False  # عشان الصور تظهر مباشرة
 
-if config('CLOUD_NAME', default=''):
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# استخدام S3 للتخزين (لو موجود البيانات)
+if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY:
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+            'OPTIONS': {
+                'endpoint_url': AWS_S3_ENDPOINT_URL,
+                'access_key': AWS_ACCESS_KEY_ID,
+                'secret_key': AWS_SECRET_ACCESS_KEY,
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_S3_REGION_NAME,
+                'location': 'media',
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
 else:
     # للتطوير المحلي
     MEDIA_URL = '/media/'
