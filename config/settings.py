@@ -15,7 +15,6 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh']
 
-# إضافة رابط Vercel الحالي
 vercel_url = os.environ.get('VERCEL_URL')
 if vercel_url:
     ALLOWED_HOSTS.append(vercel_url)
@@ -29,9 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
-    'storages',  # للتخزين مع Supabase S3
-    'cloudinary_storage',  # لو هتستخدم Cloudinary
-    'cloudinary',
+    'storages',
     'repository',
 ]
 
@@ -83,15 +80,13 @@ else:
     }
 
 # ========== تخزين الملفات (Supabase Storage via S3) ==========
-# استخدام S3 من Supabase للتخزين
 AWS_ACCESS_KEY_ID = os.getenv('SUPABASE_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('SUPABASE_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('SUPABASE_BUCKET_NAME', 'media')
 AWS_S3_REGION_NAME = os.getenv('SUPABASE_REGION', 'us-east-1')
 AWS_S3_ENDPOINT_URL = os.getenv('SUPABASE_S3_URL')
-AWS_QUERYSTRING_AUTH = False  # عشان الصور تظهر مباشرة
+AWS_QUERYSTRING_AUTH = False
 
-# استخدام S3 للتخزين (لو موجود البيانات)
 if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY:
     STORAGES = {
         'default': {
@@ -110,7 +105,6 @@ if AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY:
         },
     }
 else:
-    # للتطوير المحلي
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -128,7 +122,6 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# إعدادات الأمان للإنتاج
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
